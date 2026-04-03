@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.local
+.env.example
+.DS_Store
+.next
+.swp
+*.swp
+.vscode
+.idea
+coverage
+*.md
+node_modules
+.netlify

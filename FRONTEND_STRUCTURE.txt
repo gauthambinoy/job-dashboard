@@ -1,0 +1,275 @@
+JOB DASHBOARD FRONTEND - FILE STRUCTURE AND ROUTES
+================================================
+
+Project Root: /home/gautham/job-dashboard/frontend/
+
+DIRECTORY TREE:
+===============
+
+frontend/
+├── public/                          # Static assets
+│   ├── next.svg
+│   └── vercel.svg
+│
+├── app/                             # Next.js App Router
+│   ├── components/                  # Reusable UI Components
+│   │   ├── Header.tsx              # Top navigation bar (18 lines)
+│   │   ├── PieChart.tsx            # Match percentage pie chart (36 lines)
+│   │   ├── MatchScore.tsx          # Circular match indicator (71 lines)
+│   │   ├── DashboardCard.tsx       # Generic stat card (47 lines)
+│   │   ├── StatusBadge.tsx         # Status color badges (26 lines)
+│   │   ├── SkillTag.tsx            # Skill tag component (37 lines)
+│   │   ├── SalaryDisplay.tsx       # Salary formatting (52 lines)
+│   │   └── ConversionFunnel.tsx    # Funnel chart (83 lines)
+│   │
+│   ├── jobs/                        # Job Details Route
+│   │   └── [id]/
+│   │       └── page.tsx            # Job details page (240+ lines)
+│   │
+│   ├── profile/                     # User Profile Route
+│   │   └── page.tsx                # Profile setup form (250+ lines)
+│   │
+│   ├── search/                      # Search Routes
+│   │   ├── page.tsx                # Search filters form (230+ lines)
+│   │   └── results.tsx             # Search results table (165+ lines)
+│   │
+│   ├── tracker/                     # Application Tracker Route
+│   │   └── page.tsx                # Application tracking (430+ lines)
+│   │
+│   ├── analytics/                   # Analytics Routes
+│   │   ├── page.tsx                # Analytics dashboard (280+ lines)
+│   │   └── clusters/
+│   │       └── page.tsx            # Cluster analysis (existing)
+│   │
+│   ├── layout.tsx                  # Root layout with Header (34 lines)
+│   ├── page.tsx                    # Home/landing page (121+ lines)
+│   ├── globals.css                 # Global Tailwind styles (27 lines)
+│   └── favicon.ico
+│
+├── .next/                           # Build output (auto-generated)
+├── node_modules/                    # Dependencies
+│
+├── package.json                     # Project dependencies
+├── package-lock.json
+├── tsconfig.json                    # TypeScript config
+├── next.config.ts                   # Next.js config
+├── postcss.config.mjs               # PostCSS (for Tailwind)
+├── eslint.config.mjs                # ESLint config
+│
+├── .gitignore
+├── README.md                        # Original Next.js README
+├── COMPONENT_GUIDE.md               # NEW: Component documentation
+├── FRONTEND_BUILD_SUMMARY.md        # NEW: Build summary
+└── README_COMPONENTS.md             # NEW: Detailed component reference
+
+
+ROUTES AND PAGES:
+=================
+
+/                          Home landing page with feature overview
+                          File: app/page.tsx
+
+/profile                   User profile setup and preferences
+                          - Skills multi-select
+                          - Experience and education
+                          - Salary range
+                          - Target countries
+                          - Availability status
+                          File: app/profile/page.tsx
+
+/search                    Job search and filter interface
+                          - Domain selection
+                          - Country filter
+                          - Experience level
+                          - Salary range sliders
+                          - Availability filter
+                          File: app/search/page.tsx
+
+/search (results view)     Search results table display
+                          - Company, Title, Location
+                          - Salary, Match %, Cluster ID
+                          - Pagination support
+                          File: app/search/results.tsx (conditional render)
+
+/jobs/[id]                 Individual job details page
+                          - Full job description
+                          - Requirements and skills
+                          - Match breakdown chart
+                          - Cluster information
+                          - Apply button
+                          File: app/jobs/[id]/page.tsx
+
+/tracker                   Application tracking dashboard
+                          - Status overview cards
+                          - Applications table
+                          - Editable status
+                          - Notes and comments
+                          - Filter and sort
+                          File: app/tracker/page.tsx
+
+/analytics                 Analytics and insights
+                          - Dashboard metrics
+                          - Charts and visualizations
+                          - Cluster analysis
+                          File: app/analytics/page.tsx
+
+/analytics/clusters        Cluster detailed analysis
+                          File: app/analytics/clusters/page.tsx (existing)
+
+
+COMPONENT USAGE:
+================
+
+Header
+  Used in: app/layout.tsx (imported in RootLayout)
+  Props: None (uses usePathname internally)
+
+PieChart
+  Used in: app/jobs/[id]/page.tsx
+  Props: matchPercentage, missingSkills
+
+MatchScore
+  Used in: app/tracker/page.tsx, app/search/results.tsx
+  Props: score, size?, showLabel?
+
+DashboardCard
+  Used in: app/tracker/page.tsx, app/analytics/page.tsx
+  Props: title, value, subtitle?, icon?, trend?
+
+StatusBadge
+  Used in: app/tracker/page.tsx
+  Props: status, className?
+
+SkillTag
+  Used in: app/profile/page.tsx, app/jobs/[id]/page.tsx
+  Props: skill, variant?, onRemove?, className?
+
+SalaryDisplay
+  Used in: app/jobs/[id]/page.tsx
+  Props: min?, max?, currency?
+
+ConversionFunnel
+  Used in: app/analytics/page.tsx
+  Props: stages[], className?
+
+
+DEPENDENCIES:
+=============
+
+React 19.2.4              - React library
+react-dom 19.2.4         - DOM rendering
+Next.js 16.2.2           - Framework
+TypeScript 5             - Type safety
+Tailwind CSS 4           - Styling
+lucide-react 0.344.0     - Icons (ChevronDownIcon, BookmarkIcon, etc.)
+axios 1.6.0              - HTTP client (for future API calls)
+chart.js 4.5.1           - Charting library
+react-chartjs-2 5.3.1    - React charts wrapper
+recharts 2.10.0          - Alternative charting
+
+
+KEY FEATURES IMPLEMENTED:
+==========================
+
+✓ Responsive design (mobile, tablet, desktop)
+✓ Multi-select dropdowns with tags
+✓ Form validation and submission
+✓ Color-coded match percentages (green/yellow/red)
+✓ Pagination with page navigation
+✓ Editable table rows
+✓ Expandable/collapsible sections
+✓ SVG-based visualizations
+✓ TypeScript type safety
+✓ Mock data for testing
+✓ Smooth animations and transitions
+✓ Professional Tailwind CSS styling
+✓ Navigation with active route highlighting
+✓ Consistent UI patterns
+✓ Accessibility considerations
+
+
+STYLING APPROACH:
+=================
+
+Framework: Tailwind CSS 4
+Typography: Geist Sans and Geist Mono (Google Fonts)
+Color Palette:
+  - Primary: Blue (#2563eb for actions)
+  - Success: Green (#16a34a)
+  - Warning: Yellow (#eab308)
+  - Error: Red (#dc2626)
+  - Neutral: Gray scale (50-900)
+
+Spacing: 4px base unit (4, 8, 12, 16, 20, 24, etc.)
+Shadows: sm, md (hover effects)
+Border radius: 0.5rem (8px) standard
+
+
+DEVELOPMENT COMMANDS:
+====================
+
+npm run dev              # Start development server (port 3000)
+npm run build            # Build for production
+npm start                # Start production server
+npm run lint             # Run ESLint
+
+Local development runs at: http://localhost:3000
+
+
+TOTAL COMPONENT COUNT:
+======================
+
+Page Components:        8 (home, profile, search, results, jobs, tracker, analytics, clusters)
+Reusable Components:    8 (Header, PieChart, MatchScore, DashboardCard, StatusBadge, SkillTag, SalaryDisplay, ConversionFunnel)
+Utility Components:     0 (all are reusable)
+Custom Hooks:          0 (using React built-ins)
+
+Total TypeScript Files: 18
+Total CSS Files:        1 (globals.css)
+Total Lines of Code:    ~2000+ (excluding comments and node_modules)
+
+
+API ENDPOINTS REFERENCED:
+==========================
+
+Not yet integrated (ready for backend connection):
+
+POST /api/profile/{userId}          # Save user profile
+GET /api/jobs/search                # Search jobs with filters
+GET /api/jobs/{id}                  # Get job details
+GET /api/applications               # List applications
+PUT /api/applications/{id}          # Update application status
+DELETE /api/applications/{id}       # Delete application
+GET /api/analytics                  # Get analytics data
+
+
+NOTES FOR DEVELOPERS:
+====================
+
+1. All components use 'use client' directive for client-side interactivity
+2. Mock data is embedded and can be replaced with real API calls
+3. Form submissions use fetch API (replace with axios if preferred)
+4. Responsive design uses Tailwind breakpoints (sm, md, lg, xl)
+5. TypeScript interfaces defined for all component props
+6. Color coding is consistent across all match/status displays
+7. Icons from lucide-react are used throughout
+8. No external UI library (built with Tailwind only)
+9. Navigation uses Next.js Link and usePathname
+10. All pages are fully functional with mock data
+
+TESTING THE BUILD:
+==================
+
+1. Verify routes are accessible:
+   - Home: http://localhost:3000
+   - Profile: http://localhost:3000/profile
+   - Search: http://localhost:3000/search
+   - Job: http://localhost:3000/jobs/1
+   - Tracker: http://localhost:3000/tracker
+   - Analytics: http://localhost:3000/analytics
+
+2. Test form interactions (profile, search)
+3. Test pagination in search results
+4. Test color coding of match percentages
+5. Verify responsive design on mobile
+6. Check navigation active states
