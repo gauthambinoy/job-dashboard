@@ -38,6 +38,7 @@ import { COMPANIES } from '../data/graduate-programmes';
 
 interface SourceHealthItem {
   name: string;
+  type: 'api' | 'scrape';
   status: 'ok' | 'error';
   latencyMs: number;
   jobCount?: number;
