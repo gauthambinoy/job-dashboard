@@ -22,11 +22,13 @@ import BusinessIcon from '@mui/icons-material/Business';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Bolt from '@mui/icons-material/Bolt';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const NAV_ITEMS = [
   { label: 'Home', href: '/', icon: <HomeIcon /> },
   { label: 'Dashboard', href: '/dashboard', icon: <DashboardIcon /> },
   { label: 'Search Jobs', href: '/search', icon: <SearchIcon /> },
+  { label: 'CV Studio', href: '/cv-studio', icon: <DescriptionIcon /> },
   { label: 'Graduates', href: '/graduates', icon: <SchoolIcon /> },
   { label: 'Tracker', href: '/tracker', icon: <BookmarkIcon /> },
   { divider: true },
