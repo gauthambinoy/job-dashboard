@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as fs from 'fs';
-import * as path from 'path';
+import staticJobs from '../../../data/all-jobs.json';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -265,27 +264,18 @@ async function fetchFromBackend(params: URLSearchParams): Promise<Omit<Job, 'mat
   }
 }
 
-/** Read the static all-jobs.json fallback file from two possible locations. */
+/** Read the static all-jobs.json fallback file bundled with the frontend. */
 function readStaticFile(): Omit<Job, 'matchScore'>[] | null {
-  const candidates = [
-    path.join(process.cwd(), 'data', 'all-jobs.json'),
-    path.join(process.cwd(), '..', 'all-jobs.json'),
-    path.join('/home/gautham/job-dashboard', 'all-jobs.json'),
-  ];
+  const raw = staticJobs as unknown;
+  const arr = Array.isArray(raw)
+    ? raw
+    : (raw && typeof raw === 'object' && 'jobs' in raw && Array.isArray(raw.jobs))
+      ? raw.jobs
+      : (raw && typeof raw === 'object' && 'results' in raw && Array.isArray(raw.results))
+        ? raw.results
+        : [];
 
-  for (const p of candidates) {
-    if (fs.existsSync(p)) {
-      try {
-        const raw = JSON.parse(fs.readFileSync(p, 'utf-8'));
-        const arr = Array.isArray(raw) ? raw : (raw.jobs || raw.results || []);
-        if (arr.length > 0) return arr;
-      } catch {
-        // continue to next candidate
-      }
-    }
-  }
-
-  return null;
+  return arr.length > 0 ? arr as Omit<Job, 'matchScore'>[] : null;
 }
 
 // ─── Filtering & pagination ───────────────────────────────────────────────────

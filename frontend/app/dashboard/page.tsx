@@ -590,7 +590,7 @@ export default function DashboardPage() {
                 Welcome back
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Here's what's happening across{' '}
+                Here&apos;s what&apos;s happening across{' '}
                 <Box component="span" sx={{ color: '#6366f1', fontWeight: 700 }}>
                   {total.toLocaleString()}
                 </Box>{' '}

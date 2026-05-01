@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Job Dashboard Frontend
 
-## Getting Started
+Next.js 16 frontend for the Ireland Graduate Job Dashboard portfolio project.
 
-First, run the development server:
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+NEXT_PUBLIC_API_URL=http://localhost:5000/api BACKEND_URL=http://localhost:5000/api npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:5000/api npm run build
+npm run start
+```
 
-## Learn More
+## Important env vars
 
-To learn more about Next.js, take a look at the following resources:
+- `NEXT_PUBLIC_API_URL` — browser-visible Express API base URL.
+- `BACKEND_URL` — server-side API base used by Next.js route handlers.
+- `ADZUNA_APP_ID`, `ADZUNA_APP_KEY` — optional Adzuna source health/live data.
+- `RAPIDAPI_KEY` — optional JSearch live data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Data resilience
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`app/api/jobs` tries backend data first, live serverless scraping second, bundled `data/all-jobs.json` third, then a tiny mock fallback. This keeps the recruiter demo usable even if an upstream job source is down.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Set the project root to `frontend`, add the env vars above, and deploy. The included `next.config.ts` also supports standalone Docker builds.

@@ -292,7 +292,7 @@ export default function JobDetailsPage({ params }: JobDetailsPageProps) {
                     <span className="font-semibold">You have:</span> {matchedSkills.length} required skills
                   </p>
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">You're missing:</span> {missingSkills.length} skills
+                    <span className="font-semibold">You&apos;re missing:</span> {missingSkills.length} skills
                   </p>
                 </div>
 

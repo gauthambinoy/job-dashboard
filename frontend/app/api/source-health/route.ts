@@ -15,6 +15,7 @@ async function check(
   url: string,
   type: 'api' | 'scrape' | 'aggregator',
   timeout = 8000,
+  headers?: Record<string, string>,
 ): Promise<SourceHealth> {
   const start = Date.now();
   try {
@@ -22,7 +23,11 @@ async function check(
     const t = setTimeout(() => ac.abort(), timeout);
     const res = await fetch(url, {
       signal: ac.signal,
-      headers: { 'User-Agent': 'JobDashboard/1.0', Accept: 'application/json,text/html' },
+      headers: {
+        'User-Agent': 'JobDashboard/1.0',
+        Accept: 'application/json,text/html',
+        ...headers,
+      },
     });
     clearTimeout(t);
     const latencyMs = Date.now() - start;
@@ -48,9 +53,17 @@ async function check(
   }
 }
 
+function skippedSource(name: string, url: string, type: 'api' | 'scrape' | 'aggregator', reason: string): SourceHealth {
+  return { name, url, type, status: 'error', latencyMs: 0, error: reason };
+}
+
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const adzunaAppId = process.env.ADZUNA_APP_ID;
+  const adzunaAppKey = process.env.ADZUNA_APP_KEY;
+  const rapidApiKey = process.env.RAPIDAPI_KEY;
+
   const checks = await Promise.all([
     // ── Free JSON APIs (primary data sources) ──
     check('RemoteOK', 'https://remoteok.com/api', 'api'),
@@ -66,8 +79,22 @@ export async function GET() {
     check('YC Jobs', 'https://hacker-news.firebaseio.com/v0/jobstories.json', 'api'),
 
     // ── API key sources ──
-    check('Adzuna', 'https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=0f81e522&app_key=8567e9fd086a60634a9f711db993838d&what=developer&results_per_page=3', 'api'),
-    check('JSearch (Indeed+LinkedIn)', 'https://jsearch.p.rapidapi.com/search?query=developer+ireland&num_pages=1', 'api', 6000),
+    adzunaAppId && adzunaAppKey
+      ? check(
+          'Adzuna',
+          `https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${encodeURIComponent(adzunaAppId)}&app_key=${encodeURIComponent(adzunaAppKey)}&what=developer&results_per_page=3`,
+          'api',
+        )
+      : skippedSource('Adzuna', 'https://api.adzuna.com/v1/api/jobs/gb/search/1', 'api', 'ADZUNA_APP_ID/ADZUNA_APP_KEY not configured'),
+    rapidApiKey
+      ? check(
+          'JSearch (Indeed+LinkedIn)',
+          'https://jsearch.p.rapidapi.com/search?query=developer+ireland&num_pages=1',
+          'api',
+          6000,
+          { 'x-rapidapi-key': rapidApiKey, 'x-rapidapi-host': 'jsearch.p.rapidapi.com' },
+        )
+      : skippedSource('JSearch (Indeed+LinkedIn)', 'https://jsearch.p.rapidapi.com/search', 'api', 'RAPIDAPI_KEY not configured'),
 
     // ── HTML scrape sources ──
     check('GradIreland', 'https://gradireland.com/graduate-jobs', 'scrape', 10000),
